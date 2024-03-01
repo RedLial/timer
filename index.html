@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///C:/Users/viibintest/Python/css/timer/timer.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Timer</title>
+  <style>
+    body {
+      background-color: #0a0a0a; /* Very dark gray background color */
+      color: #fff; /* Text color */
+    }
+
+    #timer {
+      font-size: 150px;
+      text-align: center;
+      margin-top: 300px;
+    }
+
+    label {
+      margin-right: 10px;
+    }
+
+    #minuteInput {
+      width: 30px;
+      height: 20px;
+      vertical-align: middle; /* Align the text input vertically */
+      appearance: none; /* Remove default styling (up and down arrows) */
+      background-color: black; /* Set background color to black */
+      color: white; /* Text color */
+      outline: none;
+      border: #ffffff 1px solid;
+    }
+
+    #secondLabel,
+    #timeInput {
+      width: 50px;
+      height: 20px;
+      vertical-align: middle; /* Align the text input vertically */
+      appearance: none; /* Remove default styling (up and down arrows) */
+      background-color: black; /* Set background color to black */
+      color: white; /* Text color */
+      outline: none;
+      border: #ffffff 1px solid;
+    }
+
+    #startButton {
+      width: 50px;
+      height: 25px;
+      border-radius: 5%;
+      background-color: #000000;
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+
+      vertical-align: middle; /* Align the button vertically */
+      outline: none;
+      border: #ffffff 1px solid;
+    }
+  </style>
+<style type="text/css" id="operaUserStyle"></style></head>
+<body>
+
+<input type="number" id="minuteInput" min="1" placeholder="">
+
+<input type="number" id="timeInput" min="1" placeholder="">
+
+<button onclick="startTimer()" id="startButton">Start</button>
+
+<div id="timer">00:00:00</div>
+
+<script>
+  let countdown;
+  const alarmSound = new Audio('alarm.mp3'); // Replace 'alarm.mp3' with the path to your alarm sound file
+
+  function startTimer() {
+    const secondsInput = document.getElementById('timeInput').value;
+    const minutesInput = document.getElementById('minuteInput').value;
+
+    const seconds = parseInt(secondsInput) || 0;
+    const minutes = parseInt(minutesInput) || 0;
+
+    const totalSeconds = seconds + minutes * 60;
+
+    if (isNaN(totalSeconds) || totalSeconds <= 0) {
+      alert('Please enter valid positive numbers for seconds and minutes.');
+      return;
+    }
+
+    clearInterval(countdown);
+
+    let currentSeconds = totalSeconds;
+
+    countdown = setInterval(function () {
+      const hours = Math.floor(currentSeconds / 3600);
+      const minutes = Math.floor((currentSeconds % 3600) / 60);
+      const remainingSeconds = currentSeconds % 60;
+
+      const formattedTime = padNumber(hours) + ':' + padNumber(minutes) + ':' + padNumber(remainingSeconds);
+
+      document.getElementById('timer').innerText = formattedTime;
+
+      if (currentSeconds <= 0) {
+        clearInterval(countdown);
+        playAlarm();
+      } else {
+        currentSeconds--;
+      }
+    }, 1000);
+  }
+
+  function padNumber(number) {
+    return (number < 10 ? '0' : '') + number;
+  }
+  function playAlarm() {
+  // Blink white rapidly for a short duration
+  for (let i = 0; i < 2; i++) {
+    setTimeout(function () {
+      document.body.style.backgroundColor = "white";
+    }, i * 200); // Change '200' to adjust the duration between each blink
+    setTimeout(function () {
+      document.body.style.backgroundColor = "#0d0d13";
+    }, i * 200 + 100); // Adjust the duration as needed
+  }
+
+  // Play the alarm sound
+  alarmSound.play();
+
+  // Reset background color after a delay
+  setTimeout(function () {
+    document.body.style.backgroundColor = "#0d0d13";
+  }, 5000);
+}
+
+</script>
+
+
+</body></html>
